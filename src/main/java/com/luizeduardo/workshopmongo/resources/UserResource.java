@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +49,12 @@ public class UserResource {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();//vai pegar o endereço do novo objeto que foi inserido
 		return ResponseEntity.created(uri).build();//created retorna 201, contendo a localização do contéudo criado
-
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<Void> delete(@PathVariable String id) {//responseentity encapsula toda uma estrutura necessaria pra retornar uma reposta http
+		service.delete(id);
+		return ResponseEntity.noContent().build();//.ok instancia o response entity ja com o codigo de reposta
+		//.body quer o corpo da resposta
 	}
 }
