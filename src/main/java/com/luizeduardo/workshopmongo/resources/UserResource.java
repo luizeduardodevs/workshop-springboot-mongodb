@@ -1,5 +1,6 @@
 package com.luizeduardo.workshopmongo.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,14 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.luizeduardo.workshopmongo.domain.User;
 import com.luizeduardo.workshopmongo.dto.UserDTO;
 import com.luizeduardo.workshopmongo.services.UserService;
-
-import ch.qos.logback.core.joran.spi.HttpUtil.RequestMethod;
 
 
 @RestController
@@ -38,5 +40,14 @@ public class UserResource {
 		User obj = service.findById(id);
 		return ResponseEntity.ok().body(new UserDTO(obj));//.ok instancia o response entity ja com o codigo de reposta
 		//.body quer o corpo da resposta
+	}
+	
+	@PostMapping
+	public ResponseEntity<Void> insert(@RequestBody UserDTO objdto) {//vai retornar um objto vazio, o endpoint recebe como argumento o userdto, e pra aceitar esse argumento usa request body
+		User obj = service.fromDto(objdto);//converteu o dto para user
+		obj = service.insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();//vai pegar o endereço do novo objeto que foi inserido
+		return ResponseEntity.created(uri).build();//created retorna 201, contendo a localização do contéudo criado
+
 	}
 }
