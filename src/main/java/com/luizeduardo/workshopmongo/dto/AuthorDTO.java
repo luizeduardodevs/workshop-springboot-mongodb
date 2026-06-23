@@ -14,8 +14,8 @@ public class AuthorDTO implements Serializable {
 	private AuthorDTO() {}
 	public AuthorDTO(User obj) {//retorna um objeto do tipo user, pra ter uma forma automatizada pra instanciar o user a partir do userDTO
 		super();
-		id = obj.getId();
-		name = obj.getName();
+		this.id = obj.getId();
+		this.name = obj.getName();
 	}
 	public String getId() {
 		return id;
