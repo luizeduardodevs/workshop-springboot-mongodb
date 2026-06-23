@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.luizeduardo.workshopmongo.domain.Post;
 import com.luizeduardo.workshopmongo.domain.User;
 import com.luizeduardo.workshopmongo.dto.UserDTO;
 import com.luizeduardo.workshopmongo.services.UserService;
@@ -65,4 +66,12 @@ public class UserResource {
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@GetMapping(value = "/{id}/posts")
+	public ResponseEntity<List<Post>> findPosts(@PathVariable String id) {//responseentity encapsula toda uma estrutura necessaria pra retornar uma reposta http
+		User obj = service.findById(id);
+		return ResponseEntity.ok().body((obj.getPosts()));//.ok instancia o response entity ja com o codigo de reposta
+		//.body quer o corpo da resposta
+	}
+	
 }
